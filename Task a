@@ -1,0 +1,19 @@
+import java.util.Scanner;
+public class taska {
+    public static void main(String[] args){
+        Scanner scanner= new Scanner(System.in);
+        long a=scanner.nextLong();
+        long b=scanner.nextLong();
+        long gcd=gcd( a, b);
+        System.out.println(gcd);
+        scanner.close();
+    }
+    public static long gcd(long a, long b){
+        while (b!=0){
+            long c = b;
+            b=a%b;
+            a=c;
+        }
+        return a;
+    }
+}
