@@ -1,0 +1,53 @@
+import java.util.Scanner;
+public class taskb {
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        Node root = null;
+        while(scanner.hasNext()){
+            int num = scanner.nextInt();
+            if(num==0){
+                break;
+            }
+            root=insert(root,num);
+
+        }
+        leaves(root);
+        scanner.close();
+    }
+    static Node insert(Node root, int num){
+        if(root==null){
+            return new Node(num);
+        }
+        if(num==root.num){
+            return root;
+        }
+        if(num<root.num){
+            root.left=insert(root.left,num);
+        }
+        else{
+            root.right=insert(root.right,num);
+        }
+        return root;
+    }
+    static void leaves(Node root){
+        if(root==null){
+            return;
+        }
+        leaves(root.left);
+        if(root.left==null && root.right==null){
+            System.out.println(root.num+" ");
+        }
+        leaves(root.right);
+    }
+}
+class Node{
+    int num;
+    Node left;
+    Node right;
+    Node(int num){
+        this.num=num;
+        left=null;
+        right=null;
+    }
+
+}
