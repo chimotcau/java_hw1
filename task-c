@@ -1,63 +1,78 @@
 import java.util.Scanner;
-public class taskf {
-    public static void main(String[] args){
-        Scanner scanner=new Scanner(System.in);
-        String pattern=scanner.nextLine();
-        String input=scanner.nextLine();
-        StringBuilder result = match(input.toCharArray(),pattern.toCharArray());
+
+public class PatternMatcher {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String pattern = scanner.nextLine();
+        String text = scanner.nextLine();
+
+        StringBuilder result = findMatches(text.toCharArray(), pattern.toCharArray());
         System.out.print(result);
+
+        scanner.close();
     }
-    public static StringBuilder match(char[]text,char[]pattern){
-        char[]newString=new char[pattern.length+text.length+1];
-        int i=0;
-        for(int j=0;j<pattern.length;j++){
-            newString[i]=pattern[j];
-            i++;
+
+    public static StringBuilder findMatches(char[] text, char[] pattern) {
+        char[] combined = new char[pattern.length + text.length + 1];
+        int index = 0;
+
+        for (int j = 0; j < pattern.length; j++) {
+            combined[index++] = pattern[j];
         }
-        newString[i]='$';
-        i++;
-        for(int j=0;j<text.length;j++){
-            newString[i]=text[j];
-            i++;
+
+        combined[index++] = '$';
+
+        for (int j = 0; j < text.length; j++) {
+            combined[index++] = text[j];
         }
-        int[]z=zfunction(newString);
-        StringBuilder result=new StringBuilder();
-        for (i=0;i<z.length;i++) {
-            if (z[i]==pattern.length){
-                result.append(i-pattern.length-1).append(' ');
+
+        int[] z = computeZFunction(combined);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < z.length; i++) {
+            if (z[i] == pattern.length) {
+                result.append(i - pattern.length - 1).append(' ');
             }
         }
+
         return result;
     }
-    public static int[] zfunction(char[] input){
-        int[]z=new int[input.length];
-        int l=0;
-        int r=0;
-        for(int k=1;k<input.length;k++) {
-            if(k>r) {
-                l=k ;
-                r=k;
-                while(r<input.length && input[r]==input[r-l]){
-                    r++;
+
+    public static int[] computeZFunction(char[] input) {
+        int[] z = new int[input.length];
+        int left = 0;
+        int right = 0;
+
+        for (int k = 1; k < input.length; k++) {
+            if (k > right) {
+                left = right = k;
+
+                while (right < input.length && input[right] == input[right - left]) {
+                    right++;
                 }
-                z[k]=r-l;
-                r--;
-            }
-            else {
-                int k1=k-l;
-                if(z[k1]<r-k+1) {
-                    z[k]=z[k1];
-                }
-                else{
-                    l=k;
-                    while(r< input.length && input[r]==input[r-l]) {
-                        r++;
+
+                z[k] = right - left;
+                right--;
+            } else {
+                int k1 = k - left;
+
+                if (z[k1] < right - k + 1) {
+                    z[k] = z[k1];
+                } else {
+                    left = k;
+
+                    while (right < input.length && input[right] == input[right - left]) {
+                        right++;
                     }
-                    z[k]=r-l;
-                    r--;
+
+                    z[k] = right - left;
+                    right--;
                 }
             }
         }
+
         return z;
     }
 }
