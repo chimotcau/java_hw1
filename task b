@@ -7,7 +7,6 @@ public class TreeLeaves {
         printLeaves(root);
     }
 
-
     private static Node buildTree() {
         Scanner scanner = new Scanner(System.in);
         Node root = null;
