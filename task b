@@ -1,53 +1,67 @@
 import java.util.Scanner;
-public class taskb {
-    public static void main(String[] args){
-        Scanner scanner=new Scanner(System.in);
+
+public class TreeLeaves {
+
+    public static void main(String[] args) {
+        Node root = buildTree();
+        printLeaves(root);
+    }
+
+
+    private static Node buildTree() {
+        Scanner scanner = new Scanner(System.in);
         Node root = null;
-        while(scanner.hasNext()){
-            int num = scanner.nextInt();
-            if(num==0){
+
+        while (scanner.hasNext()) {
+            int number = scanner.nextInt();
+
+            if (number == 0) {
                 break;
             }
-            root=insert(root,num);
 
+            root = insert(root, number);
         }
-        leaves(root);
+
         scanner.close();
-    }
-    static Node insert(Node root, int num){
-        if(root==null){
-            return new Node(num);
-        }
-        if(num==root.num){
-            return root;
-        }
-        if(num<root.num){
-            root.left=insert(root.left,num);
-        }
-        else{
-            root.right=insert(root.right,num);
-        }
         return root;
     }
-    static void leaves(Node root){
-        if(root==null){
-            return;
+
+    private static Node insert(Node root, int number) {
+        if (root == null) {
+            return new Node(number);
         }
-        leaves(root.left);
-        if(root.left==null && root.right==null){
-            System.out.println(root.num+" ");
+
+        if (number < root.number) {
+            root.left = insert(root.left, number);
+        } else if (number > root.number) {
+            root.right = insert(root.right, number);
         }
-        leaves(root.right);
-    }
-}
-class Node{
-    int num;
-    Node left;
-    Node right;
-    Node(int num){
-        this.num=num;
-        left=null;
-        right=null;
+
+        return root;
     }
 
+    private static void printLeaves(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        printLeaves(root.left);
+
+        if (root.left == null && root.right == null) {
+            System.out.println(root.number);
+        }
+
+        printLeaves(root.right);
+    }
+}
+
+class Node {
+
+    int number;
+    Node left;
+    Node right;
+
+    Node(int number) {
+        this.number = number;
+    }
 }
