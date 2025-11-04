@@ -1,0 +1,56 @@
+import java.util.Scanner;
+
+public class IntersectionCounter {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        long x1 = scanner.nextLong();
+        long y1 = scanner.nextLong();
+        long x2 = scanner.nextLong();
+        long y2 = scanner.nextLong();
+
+        int n = scanner.nextInt();
+        int count = count_Intersect(scanner, x1, y1, x2, y2, n);
+
+        System.out.println(count);
+
+        scanner.close();
+    }
+
+    private static int count_Intersect(Scanner scanner, long x1, long y1, long x2, long y2, int n) {
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            long x3 = scanner.nextLong();
+            long y3 = scanner.nextLong();
+            long x4 = scanner.nextLong();
+            long y4 = scanner.nextLong();
+
+            if (segments_Intersect(x1, y1, x2, y2, x3, y3, x4, y4)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private static long cross_of(long x1, long y1, long x2, long y2) {
+        return x1 * y2 - y1 * x2;
+    }
+
+    private static boolean segments_Intersect(
+            long x1, long y1, long x2, long y2,
+            long x3, long y3, long x4, long y4) {
+
+        long l1 = cross_of(x3 - x1, y3 - y1, x2 - x1, y2 - y1);
+        long l2 = cross_of(x4 - x1, y4 - y1, x2 - x1, y2 - y1);
+        long l3 = cross_of(x1 - x3, y1 - y3, x4 - x3, y4 - y3);
+        long l4 = cross_of(x2 - x3, y2 - y3, x4 - x3, y4 - y3);
+
+        boolean condition1 = (l1 > 0 && l2 < 0) || (l1 < 0 && l2 > 0);
+        boolean condition2 = (l3 > 0 && l4 < 0) || (l3 < 0 && l4 > 0);
+
+        return condition1 && condition2;
+    }
+}
