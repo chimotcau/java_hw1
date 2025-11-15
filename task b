@@ -1,0 +1,66 @@
+import java.util.Scanner;
+
+public class TreeLeaves {
+
+    public static void main(String[] args) {
+        Node root = buildTree();
+        printLeaves(root);
+    }
+
+    private static Node buildTree() {
+        Scanner scanner = new Scanner(System.in);
+        Node root = null;
+
+        while (scanner.hasNext()) {
+            int number = scanner.nextInt();
+
+            if (number == 0) {
+                break;
+            }
+
+            root = insert(root, number);
+        }
+
+        scanner.close();
+        return root;
+    }
+
+    private static Node insert(Node root, int number) {
+        if (root == null) {
+            return new Node(number);
+        }
+
+        if (number < root.number) {
+            root.left = insert(root.left, number);
+        } else if (number > root.number) {
+            root.right = insert(root.right, number);
+        }
+
+        return root;
+    }
+
+    private static void printLeaves(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        printLeaves(root.left);
+
+        if (root.left == null && root.right == null) {
+            System.out.println(root.number);
+        }
+
+        printLeaves(root.right);
+    }
+}
+
+class Node {
+
+    int number;
+    Node left;
+    Node right;
+
+    Node(int number) {
+        this.number = number;
+    }
+}
