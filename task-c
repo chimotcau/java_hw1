@@ -1,0 +1,78 @@
+import java.util.Scanner;
+
+public class PatternMatcher {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String pattern = scanner.nextLine();
+        String text = scanner.nextLine();
+
+        StringBuilder result = findMatches(text.toCharArray(), pattern.toCharArray());
+        System.out.print(result);
+
+        scanner.close();
+    }
+
+    public static StringBuilder findMatches(char[] text, char[] pattern) {
+        char[] combined = new char[pattern.length + text.length + 1];
+        int index = 0;
+
+        for (int j = 0; j < pattern.length; j++) {
+            combined[index++] = pattern[j];
+        }
+
+        combined[index++] = '$';
+
+        for (int j = 0; j < text.length; j++) {
+            combined[index++] = text[j];
+        }
+
+        int[] z = computeZFunction(combined);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < z.length; i++) {
+            if (z[i] == pattern.length) {
+                result.append(i - pattern.length - 1).append(' ');
+            }
+        }
+
+        return result;
+    }
+
+    public static int[] computeZFunction(char[] input) {
+        int[] z = new int[input.length];
+        int left = 0;
+        int right = 0;
+
+        for (int k = 1; k < input.length; k++) {
+            if (k > right) {
+                left = right = k;
+
+                while (right < input.length && input[right] == input[right - left]) {
+                    right++;
+                }
+
+                z[k] = right - left;
+                right--;
+            } else {
+                int k1 = k - left;
+
+                if (z[k1] < right - k + 1) {
+                    z[k] = z[k1];
+                } else {
+                    left = k;
+
+                    while (right < input.length && input[right] == input[right - left]) {
+                        right++;
+                    }
+
+                    z[k] = right - left;
+                    right--;
+                }
+            }
+        }
+
+        return z;
+    }
+}
